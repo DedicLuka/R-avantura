@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#152a58">
+<title>R-avantura</title>
+<style>
+:root{--yellow:#ffd65a;--navy:#152a58;--purple:#6845b5}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#152a58,#6845b5);color:white;font-family:system-ui,-apple-system,sans-serif;min-height:100dvh}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation}
+.app{max-width:560px;margin:auto;padding:15px 15px 35px}
+header{text-align:center;padding:10px 0 16px}
+h1{font-size:31px;margin:5px}
+h2{text-align:center;font-size:23px;margin:12px 0}
+.sub{color:#ddd6ff;text-align:center}
+.panel{background:#ffffff17;border:1px solid #ffffff35;border-radius:23px;padding:18px;margin-bottom:14px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.day{padding:12px 1px;background:#ffffff20;border:1px solid #ffffff40;border-radius:12px;color:white;font-size:12px}
+.day.active{background:var(--yellow);color:#222;font-weight:900}
+.day.done{border:2px solid #78f2aa}
+.hero{text-align:center;font-size:76px;margin:15px 0}
+.primary{background:var(--yellow);color:#242044;border:0;border-radius:18px;padding:17px;font-size:19px;font-weight:900;width:100%;min-height:58px}
+.listen{background:#37d8ef;color:#082c48;border:0;border-radius:23px;font-size:27px;font-weight:1000;width:100%;min-height:100px;margin:12px 0;box-shadow:0 7px 0 #16849b}
+.listen:active{transform:translateY(4px);box-shadow:0 3px 0 #16849b}
+.listen span{display:block;font-size:15px;font-weight:600;margin-top:3px}
+.optionGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}
+.option{background:#ffffff25;color:white;border:2px solid #ffffff50;border-radius:19px;min-height:100px;font-size:49px}
+.option:disabled{opacity:.8}
+.correct{background:#268c65!important;border-color:#a6ffd0!important}
+.wrong{background:#a53c5d!important}
+.prompt{text-align:center;font-size:22px;font-weight:800;min-height:48px}
+.help{text-align:center;color:#e8e1ff;font-size:15px;line-height:1.5}
+.feedback{text-align:center;font-size:20px;font-weight:800;min-height:30px}
+.progress{height:12px;border-radius:20px;background:#ffffff30;overflow:hidden}
+.progress>div{height:100%;width:0;background:var(--yellow);transition:.4s}
+.topline{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.timer{font-size:25px;font-weight:900}
+.next{background:#ffffff25;color:white;border:1px solid #ffffff55;border-radius:15px;padding:15px;width:100%;font-size:18px;font-weight:800}
+.track{height:110px;position:relative;background:#ffffff15;border-radius:18px;overflow:hidden;margin:20px 0}
+.road{position:absolute;top:60px;left:0;width:100%;border-top:5px dashed #ffffff80}
+.vehicle{position:absolute;left:5%;top:13px;font-size:65px;transition:left .6s}
+.target{position:absolute;right:10px;top:18px;font-size:55px}
+.stars{text-align:center;font-size:38px;letter-spacing:5px}
+.hidden{display:none!important}
+.footer{text-align:center;font-size:12px;color:#c9c0ed;margin-top:15px}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.bounce{animation:bounce .6s}
+@keyframes pop{50%{transform:scale(1.2)}}
+.pop{animation:pop .35s}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<h1>🚀 R-avantura</h1>
+<div class="sub">Sedam dana malih govornih misija</div>
+</header>
+
+<div class="panel"><div id="days" class="days"></div></div>
+
+<section id="home" class="panel">
+<div id="homeEmoji" class="hero">🦁</div>
+<h2 id="homeTitle"></h2>
+<p id="homeDesc" class="help"></p>
+<div id="homeStars" class="stars"></div>
+<p class="help">Pet minuta igre uz mamu ili tatu.</p>
+<button class="primary" onclick="startGame()">▶ KRENI U IGRU</button>
+</section>
+
+<section id="game" class="panel hidden">
+<div class="topline">
+<strong id="mission"></strong>
+<div class="timer" id="timer">05:00</div>
+</div>
+<div class="progress"><div id="progress"></div></div>
+<div class="hero" id="character"></div>
+<div class="prompt" id="prompt"></div>
+<p class="help" id="help"></p>
+<button class="listen" id="listenBtn" onclick="listen()">🔊 SLUŠAJ<span>Dodirni za zvuk</span></button>
+<div id="choices" class="optionGrid"></div>
+<div id="special"></div>
+<div class="feedback" id="feedback"></div>
+<button class="next" onclick="nextTask()">SLJEDEĆI ZADATAK ➜</button>
+</section>
+
+<section id="finish" class="panel hidden">
+<div class="hero">🏆</div>
+<h2>Bravo, mali junaku!</h2>
+<p class="help">Završio si današnju avanturu!</p>
+<div class="stars">⭐⭐⭐</div>
+<button class="primary" onclick="finishHome()">NASTAVI AVANTURU</button>
+</section>
+
+<div class="footer">Bez forsiranja glasa R • Igra uz roditelja</div>
+</div>
+
+<script>
+const days=[
+{title:"Lav ili robot",emoji:"🦁",desc:"Slušaj riječi i otkrij počinju li glasom L ili R."},
+{title:"Svemirska misija",emoji:"🚀",desc:"Pronađi predmete koji počinju glasom R."},
+{title:"Mali bubnjar",emoji:"🥁",desc:"Prati ritam i igraj se slogovima."},
+{title:"Veseli vlak",emoji:"🚂",desc:"Pokreni vlak uz TA–DA i TE–DE."},
+{title:"Ribolov",emoji:"🐟",desc:"Upecaj ribice s glasom R."},
+{title:"Velika utrka",emoji:"🏎️",desc:"Slušaj motor i pokušaj oponašati glas R."},
+{title:"Veliko finale",emoji:"🏆",desc:"Pokaži sve što si naučio!"}
+];
+
+const words=[
+{word:"LAV",emoji:"🦁",sound:"L"},
+{word:"RIBA",emoji:"🐟",sound:"R"},
+{word:"LIMUN",emoji:"🍋",sound:"L"},
+{word:"RAKETA",emoji:"🚀",sound:"R"},
+{word:"LOPTA",emoji:"⚽",sound:"L"},
+{word:"ROBOT",emoji:"🤖",sound:"R"},
+{word:"LIST",emoji:"🍃",sound:"L"},
+{word:"RAK",emoji:"🦀",sound:"R"},
+{word:"LUK",emoji:"🧅",sound:"L"},
+{word:"RUKA",emoji:"✋",sound:"R"},
+{word:"LISICA",emoji:"🦊",sound:"L"},
+{word:"RUŽA",emoji:"🌹",sound:"R"}
+];
+
+const rhythms=["DA DA DA","DE DE DE","DI DI DI","TA DA","TE DE","TA TA DA","DA DE DI"];
+let day=Number(localStorage.getItem("ra_day")||0);
+let done=JSON.parse(localStorage.getItem("ra_done")||"[]");
+let task=0,seconds=300,ticker=null,score=0,answered=false;
+const $=id=>document.getElementById(id);
+
+function drawDays(){
+$("days").innerHTML="";
+days.forEach((d,i)=>{
+const b=document.createElement("button");
+b.className="day"+(i===day?" active":"")+(done.includes(i)?" done":"");
+b.textContent=(done.includes(i)?"⭐":"")+(i+1);
+b.onclick=()=>{day=i;localStorage.setItem("ra_day",day);home()};
+$("days").appendChild(b);
+});
+}
+
+function home(){
+clearInterval(ticker);
+$("home").classList.remove("hidden");
+$("game").classList.add("hidden");
+$("finish").classList.add("hidden");
+$("homeEmoji").textContent=days[day].emoji;
+$("homeTitle").textContent="Dan "+(day+1)+": "+days[day].title;
+$("homeDesc").textContent=days[day].desc;
+$("homeStars").textContent=done.includes(day)?"⭐⭐⭐":"☆☆☆";
+drawDays();
+}
+
+function speak(text){
+if(!("speechSynthesis" in window))return;
+speechSynthesis.cancel();
+const u=new SpeechSynthesisUtterance(text);
+u.lang="hr-HR";
+u.rate=.75;
+speechSynthesis.speak(u);
+}
+
+function startGame(){
+task=0;seconds=300;score=0;
+$("home").classList.add("hidden");
+$("finish").classList.add("hidden");
+$("game").classList.remove("hidden");
+clearInterval(ticker);
+ticker=setInterval(()=>{
+seconds--;
+$("timer").textContent=
+String(Math.floor(Math.max(seconds,0)/60)).padStart(2,"0")+":"+
+String(Math.max(seconds,0)%60).padStart(2,"0");
+if(seconds<=0)endGame();
+},1000);
+showTask();
+}
+
+function mode(){
+if(day===0)return"detective";
+if(day===1)return"space";
+if(day===2)return"drum";
+if(day===3)return"train";
+if(day===4)return"fish";
+if(day===5)return"race";
+return["detective","space","drum","train","fish","race"][task%6];
+}
+
+function currentWord(){
+return words[(task*3+day)%words.length];
+}
+
+function showTask(){
+answered=false;
+$("feedback").textContent="";
+$("choices").innerHTML="";
+$("special").innerHTML="";
+$("progress").style.width=(task/12*100)+"%";
+$("mission").textContent="Dan "+(day+1)+" • Zadatak "+(task+1);
+$("listenBtn").style.display="block";
+const m=mode(),w=currentWord();
+
+if(m==="detective"){
+$("character").textContent="🦁 🤖";
+$("prompt").textContent="Koji glas čuješ na početku?";
+$("help").textContent="Poslušaj riječ i odaberi L ili R.";
+makeChoice("🦁 L",()=>check("L"===w.sound),"🤖 R",()=>check("R"===w.sound));
+}
+if(m==="space"){
+$("character").textContent="🚀";
+$("prompt").textContent="Pronađi glas R!";
+$("help").textContent="Poslušaj riječ pa odluči ide li predmet u raketu R.";
+makeChoice("🚀 R",()=>check(w.sound==="R"),"🌙 L",()=>check(w.sound==="L"));
+}
+if(m==="fish"){
+$("character").textContent="🎣 🐟";
+$("prompt").textContent="Upecaj pravi glas!";
+$("help").textContent="Poslušaj riječ. Ako počinje glasom R, uhvati ribicu R.";
+makeChoice("🐟 R",()=>check(w.sound==="R"),"🐠 L",()=>check(w.sound==="L"));
+}
+if(m==="drum"){
+$("character").textContent="🥁";
+$("prompt").textContent=rhythms[task%rhythms.length];
+$("help").textContent="Pritisni bubanj u ritmu i ponovi slogove uz roditelja.";
+$("listenBtn").style.display="none";
+makeDrum();
+}
+if(m==="train"){
+$("character").textContent="🚂";
+$("prompt").textContent=task%2?"TE – DE":"TA – DA";
+$("help").textContent="Izgovorite slogove jasno i pomaknite vlak.";
+$("listenBtn").style.display="none";
+makeTrack("🚂","🏁");
+}
+if(m==="race"){
+$("character").textContent="🏎️";
+$("prompt").textContent="Kako zvuči motor?";
+$("help").textContent="Poslušaj roditeljev RRR. Pokušaj 2–3 puta bez forsiranja.";
+$("listenBtn").style.display="none";
+makeTrack("🏎️","🏆");
+}
+}
+
+function makeChoice(a,fa,b,fb){
+const x=document.createElement("button"),y=document.createElement("button");
+x.className=y.className="option";
+x.textContent=a;y.textContent=b;
+x.onclick=()=>{if(!answered){fa();x.classList.add($("feedback").textContent.startsWith("Bravo")?"correct":"wrong")}};
+y.onclick=()=>{if(!answered){fb();y.classList.add($("feedback").textContent.startsWith("Bravo")?"correct":"wrong")}};
+$("choices").append(x,y);
+}
+
+function check(ok){
+answered=true;
+if(ok){score++;$("feedback").textContent="Bravo! ⭐";}
+else $("feedback").textContent="Pokušaj ponovno poslušati s roditeljem.";
+}
+
+function makeDrum(){
+let hits=0;
+const b=document.createElement("button");
+b.className="primary";
+b.style.fontSize="35px";
+b.style.minHeight="110px";
+b.textContent="🥁 BUM!";
+b.onclick=()=>{
+hits++;
+b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");
+if(hits>=5){$("feedback").textContent="Odličan ritam! ⭐";answered=true;}
+};
+$("special").appendChild(b);
+}
+
+function makeTrack(vehicle,target){
+let pos=5;
+const track=document.createElement("div");
+track.className="track";
+track.innerHTML='<div class="road"></div><div class="vehicle" id="moving"></div><div class="target"></div>';
+$("special").appendChild(track);
+track.querySelector(".vehicle").textContent=vehicle;
+track.querySelector(".target").textContent=target;
+const b=document.createElement("button");
+b.className="primary";
+b.textContent="▶ POKRENI!";
+b.onclick=()=>{
+pos=Math.min(pos+18,78);
+track.querySelector(".vehicle").style.left=pos+"%";
+if(pos>=77){answered=true;$("feedback").textContent="Stigao si do cilja! ⭐";}
+};
+$("special").appendChild(b);
+}
+
+function listen(){
+const w=currentWord();
+speak(w.word.toLowerCase());
+}
+
+function nextTask(){
+task++;
+if(task>=12){endGame();return}
+showTask();
+}
+
+function endGame(){
+clearInterval(ticker);
+if(!done.includes(day))done.push(day);
+localStorage.setItem("ra_done",JSON.stringify(done));
+$("game").classList.add("hidden");
+$("finish").classList.remove("hidden");
+drawDays();
+}
+
+function finishHome(){
+if(day<6)day++;
+localStorage.setItem("ra_day",day);
+home();
+}
+
+home();
+</script>
+</body>
+</html>
