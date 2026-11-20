@@ -14,9 +14,14 @@
  --pink:#ff88b8;
  --green:#5ce6a4;
 }
-body{
+html,body{
  margin:0;
- min-height:100dvh;
+ width:100%;
+ height:100%;
+ overflow:hidden;
+ overscroll-behavior:none;
+}
+body{
  background:linear-gradient(160deg,#101d43,#47318a);
  color:white;
  font-family:system-ui,-apple-system,sans-serif;
@@ -26,114 +31,117 @@ button{
  cursor:pointer;
  touch-action:manipulation;
 }
-button:disabled{opacity:.55;cursor:default}
+button:disabled{opacity:.55}
 .app{
+ width:100%;
  max-width:560px;
+ height:100dvh;
  margin:auto;
- padding:14px 14px 35px;
+ padding:
+ max(6px,env(safe-area-inset-top))
+ 10px
+ max(6px,env(safe-area-inset-bottom));
+ display:flex;
+ flex-direction:column;
+ gap:6px;
+ overflow:hidden;
 }
-header{text-align:center;padding:8px}
-h1{font-size:28px;margin:5px}
-.sub{font-size:14px;color:#dcd7ff}
+header{
+ text-align:center;
+ flex-shrink:0;
+}
+h1{
+ font-size:clamp(18px,4.8vw,24px);
+ margin:2px 0;
+}
+.sub{
+ font-size:11px;
+ color:#ddd5ff;
+}
 .panel{
  background:#ffffff15;
  border:1px solid #ffffff35;
- border-radius:23px;
- padding:16px;
- margin-bottom:13px;
+ border-radius:16px;
+ padding:9px;
+ min-height:0;
 }
 .days{
  display:grid;
  grid-template-columns:repeat(7,1fr);
- gap:5px;
+ gap:4px;
 }
 .day{
  background:#ffffff20;
  border:1px solid #ffffff40;
  color:white;
- border-radius:12px;
- min-height:46px;
+ border-radius:9px;
+ min-height:30px;
+ font-size:12px;
  font-weight:800;
 }
-.day.active{background:var(--gold);color:#202044}
+.day.active{
+ background:var(--gold);
+ color:#202044;
+}
 .day.done{border:2px solid var(--green)}
-.hero{text-align:center;font-size:70px;margin:12px}
-h2{text-align:center;font-size:23px}
+#home,#finish{
+ flex:1;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:12px;
+}
+.hero{
+ text-align:center;
+ font-size:clamp(55px,12vh,90px);
+}
+h2{
+ text-align:center;
+ font-size:22px;
+ margin:5px;
+}
 .help{
  text-align:center;
  color:#e8e2ff;
- line-height:1.45;
- font-size:15px;
+ line-height:1.25;
+ font-size:clamp(12px,2.8vw,14px);
+ margin:3px 0;
 }
 .primary{
  width:100%;
- min-height:60px;
+ min-height:48px;
  background:var(--gold);
  border:0;
- border-radius:17px;
+ border-radius:13px;
  color:#292044;
- font-size:19px;
- font-weight:900;
- padding:12px;
-}
-.listen{
- width:100%;
- min-height:95px;
- background:var(--cyan);
- color:#073c53;
- border:0;
- border-radius:20px;
- font-size:27px;
- font-weight:900;
- margin:10px 0;
-}
-.mic{
- width:100%;
- min-height:85px;
- background:var(--pink);
- color:#4b1640;
- border:0;
- border-radius:20px;
- font-size:24px;
- font-weight:900;
- margin:8px 0;
-}
-.small{display:block;font-size:13px;margin-top:4px}
-.options{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
- margin:14px 0;
-}
-.option{
- min-height:105px;
- border-radius:20px;
- background:#ffffff20;
- border:2px solid #ffffff50;
- color:white;
- font-size:64px;
+ font-size:17px;
  font-weight:900;
 }
-.option.correct{background:#20865c}
-.option.wrong{background:#963c62}
-.prompt{
- font-size:24px;
- text-align:center;
- font-weight:900;
- margin:12px 0;
+#game{
+ flex:1;
+ display:flex;
+ flex-direction:column;
+ gap:5px;
+ overflow:hidden;
 }
 .top{
  display:flex;
  justify-content:space-between;
  align-items:center;
- margin-bottom:10px;
+ flex-shrink:0;
+ font-size:12px;
 }
-.timer{font-size:24px;font-weight:900}
+.timer{
+ font-size:18px;
+ font-weight:900;
+}
 .progress{
- height:12px;
+ height:7px;
  background:#ffffff30;
  border-radius:20px;
  overflow:hidden;
+ flex-shrink:0;
 }
 .bar{
  height:100%;
@@ -143,10 +151,11 @@ h2{text-align:center;font-size:23px}
 }
 .world{
  position:relative;
- height:230px;
- margin:15px 0;
+ flex:1;
+ min-height:75px;
+ max-height:240px;
  overflow:hidden;
- border-radius:22px;
+ border-radius:14px;
  background:linear-gradient(#3471bf,#83c5ed);
 }
 .world.space{
@@ -162,111 +171,194 @@ h2{text-align:center;font-size:23px}
  background:linear-gradient(#79c9ee,#60aa77);
 }
 .world:before{
- content:"✦  ✧  ✦";
+ content:"✦ ✧ ✦";
  position:absolute;
- top:15px;
- right:20px;
- font-size:24px;
+ top:8px;
+ right:15px;
+ font-size:18px;
  opacity:.6;
 }
 .path{
  position:absolute;
  left:8%;
  right:8%;
- bottom:50px;
- height:9px;
+ bottom:29%;
+ height:6px;
  background:#ffffff80;
  border-radius:20px;
 }
 .actor{
  position:absolute;
  left:7%;
- bottom:65px;
- font-size:66px;
+ bottom:34%;
+ font-size:clamp(35px,8vh,65px);
  transition:left .65s ease;
  z-index:2;
- filter:drop-shadow(0 5px 5px #0004);
 }
 .goal{
  position:absolute;
  right:4%;
- bottom:65px;
- font-size:55px;
+ bottom:34%;
+ font-size:clamp(32px,7vh,55px);
 }
 .worldLabel{
  position:absolute;
- top:12px;
- left:15px;
- font-size:14px;
+ top:7px;
+ left:9px;
+ font-size:11px;
  font-weight:800;
  background:#0004;
- border-radius:12px;
- padding:7px 11px;
+ border-radius:9px;
+ padding:5px 8px;
 }
 .stepText{
  position:absolute;
- bottom:10px;
+ bottom:5px;
  left:0;
  width:100%;
  text-align:center;
- font-size:15px;
+ font-size:11px;
  font-weight:800;
 }
+.prompt{
+ font-size:clamp(17px,4.5vw,23px);
+ text-align:center;
+ font-weight:900;
+ margin:2px 0;
+ flex-shrink:0;
+}
+.listen{
+ width:100%;
+ min-height:49px;
+ background:var(--cyan);
+ color:#073c53;
+ border:0;
+ border-radius:13px;
+ font-size:19px;
+ font-weight:900;
+ flex-shrink:0;
+}
+.mic{
+ width:100%;
+ min-height:51px;
+ background:var(--pink);
+ color:#4b1640;
+ border:0;
+ border-radius:13px;
+ font-size:19px;
+ font-weight:900;
+ flex-shrink:0;
+}
+.small{
+ display:block;
+ font-size:10px;
+ font-weight:500;
+}
+.options{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ flex-shrink:0;
+}
+.options:empty{display:none}
+.option{
+ min-height:62px;
+ border-radius:13px;
+ background:#ffffff20;
+ border:2px solid #ffffff50;
+ color:white;
+ font-size:42px;
+ font-weight:900;
+}
+.option.correct{background:#20865c}
+.option.wrong{background:#963c62}
 .feedback{
  text-align:center;
- min-height:45px;
- font-size:19px;
+ min-height:22px;
+ font-size:clamp(12px,3vw,15px);
  font-weight:800;
- margin:12px 0;
+ flex-shrink:0;
 }
 .parent{
- background:#ffffff12;
- border-radius:16px;
- padding:10px;
- margin:12px 0;
+ display:flex;
+ gap:6px;
+ align-items:center;
+ flex-shrink:0;
 }
 .parentTitle{
- font-size:12px;
+ font-size:10px;
  color:#d8d0ff;
- text-align:center;
- margin-bottom:8px;
+ width:72px;
 }
 .parent button{
- width:100%;
+ flex:1;
  background:#ffffff25;
  border:1px solid #ffffff50;
  color:white;
- padding:13px;
- border-radius:13px;
- font-size:16px;
+ padding:8px 5px;
+ border-radius:10px;
+ font-size:12px;
  font-weight:800;
 }
 .next{
  width:100%;
+ min-height:42px;
  background:#ffffff25;
  border:1px solid #ffffff50;
  color:white;
- border-radius:15px;
- padding:15px;
- font-size:17px;
+ border-radius:12px;
+ font-size:15px;
  font-weight:800;
+ flex-shrink:0;
 }
-.stars{text-align:center;font-size:36px}
+.stars{
+ text-align:center;
+ font-size:30px;
+}
 .hidden{display:none!important}
 .footer{
  text-align:center;
- font-size:12px;
+ font-size:9px;
  color:#c8c0e8;
- margin-top:15px;
+ flex-shrink:0;
 }
 @keyframes celebrate{
  0%,100%{transform:scale(1)}
- 50%{transform:scale(1.22) rotate(-7deg)}
+ 50%{transform:scale(1.2) rotate(-7deg)}
 }
 .celebrate{animation:celebrate .5s}
+
+/* Mali iPhone zasloni */
+@media(max-height:750px){
+ .app{gap:4px}
+ .panel{padding:6px}
+ .day{min-height:26px}
+ .world{min-height:60px}
+ .listen{min-height:43px}
+ .mic{min-height:44px}
+ .option{min-height:52px;font-size:35px}
+ .next{min-height:37px}
+ .help{font-size:11px}
+ .parent button{padding:6px 4px}
+}
+/* Vrlo niski zasloni ili landscape */
+@media(max-height:560px){
+ header .sub,.footer,#help{display:none}
+ h1{font-size:17px}
+ .world{min-height:45px}
+ .actor{font-size:34px}
+ .goal{font-size:30px}
+ .listen,.mic{min-height:35px;font-size:15px}
+ .small{display:none}
+ .option{min-height:36px;font-size:26px}
+ .next{min-height:32px}
+ .parent button{padding:4px}
+ .feedback{min-height:16px}
+}
 </style>
 </head>
 <body>
+
 <div class="app">
 
 <header>
@@ -283,7 +375,6 @@ h2{text-align:center;font-size:23px}
 <h2 id="homeTitle"></h2>
 <p id="homeDesc" class="help"></p>
 <div id="homeStars" class="stars"></div>
-<p class="help">Jakove, spreman za novu misiju?</p>
 <button class="primary" onclick="startGame()">
 ▶ ZAPOČNI MISIJU
 </button>
@@ -294,7 +385,10 @@ h2{text-align:center;font-size:23px}
 <strong id="mission"></strong>
 <div class="timer" id="timer">05:00</div>
 </div>
-<div class="progress"><div id="bar" class="bar"></div></div>
+
+<div class="progress">
+<div id="bar" class="bar"></div>
+</div>
 
 <div id="world" class="world">
 <div id="worldLabel" class="worldLabel"></div>
@@ -322,9 +416,9 @@ h2{text-align:center;font-size:23px}
 <div id="feedback" class="feedback"></div>
 
 <div class="parent">
-<div class="parentTitle">RODITELJSKA POTVRDA</div>
+<div class="parentTitle">RODITELJ</div>
 <button onclick="parentConfirm()">
-👏 Potvrdi Jakovljev pokušaj
+👏 Potvrdi pokušaj
 </button>
 </div>
 
@@ -344,7 +438,7 @@ NASTAVI AVANTURU
 </section>
 
 <div class="footer">
-Igra uz roditelja • Mikrofon ne procjenjuje pravilnost glasa R
+Vježbe uz roditelja • Mikrofon ne ocjenjuje pravilnost R
 </div>
 </div>
 
@@ -358,52 +452,17 @@ const praise=[
 "Fenomenalno, Jakove! Još malo!",
 "Super pokušaj, Jakove!",
 "Jakove, osvojio si novu zvjezdicu!",
-"Bravo, Jakove! Uspio si pomaknuti svog junaka!"
+"Bravo, Jakove! Uspio si!"
 ];
 
 const days=[
-{
-title:"Svemirska misija",
-emoji:"🚀",
-desc:"Izgovaraj slogove i poleti do Mjeseca!",
-actor:"🚀",goal:"🌕",world:"space"
-},
-{
-title:"Utrka automobila",
-emoji:"🏎️",
-desc:"Svaki slog pomiče automobil prema cilju.",
-actor:"🏎️",goal:"🏁",world:"roadworld"
-},
-{
-title:"Putovanje vlakom",
-emoji:"🚂",
-desc:"Pokreni vlak govornim zadacima.",
-actor:"🚂",goal:"🏰",world:"forest"
-},
-{
-title:"Potraga za blagom",
-emoji:"🤿",
-desc:"Zaroni i pronađi skriveno blago.",
-actor:"🤿",goal:"💎",world:"ocean"
-},
-{
-title:"Šumska avantura",
-emoji:"🦊",
-desc:"Pronađi put kroz čarobnu šumu.",
-actor:"🦊",goal:"🏡",world:"forest"
-},
-{
-title:"Velika utrka",
-emoji:"🏎️",
-desc:"Pobijedi u utrci izgovaranjem slogova.",
-actor:"🏎️",goal:"🏆",world:"roadworld"
-},
-{
-title:"Završna misija",
-emoji:"🚀",
-desc:"Pokaži sve što si naučio!",
-actor:"🚀",goal:"🏆",world:"space"
-}
+{title:"Svemirska misija",emoji:"🚀",desc:"Izgovaraj slogove i poleti do Mjeseca!",actor:"🚀",goal:"🌕",world:"space"},
+{title:"Utrka automobila",emoji:"🏎️",desc:"Svaki slog pomiče automobil prema cilju.",actor:"🏎️",goal:"🏁",world:"roadworld"},
+{title:"Putovanje vlakom",emoji:"🚂",desc:"Pokreni vlak govornim zadacima.",actor:"🚂",goal:"🏰",world:"forest"},
+{title:"Potraga za blagom",emoji:"🤿",desc:"Zaroni i pronađi skriveno blago.",actor:"🤿",goal:"💎",world:"ocean"},
+{title:"Šumska avantura",emoji:"🦊",desc:"Pronađi put kroz čarobnu šumu.",actor:"🦊",goal:"🏡",world:"forest"},
+{title:"Velika utrka",emoji:"🏎️",desc:"Pobijedi u utrci izgovaranjem slogova.",actor:"🏎️",goal:"🏆",world:"roadworld"},
+{title:"Završna misija",emoji:"🚀",desc:"Pokaži sve što si naučio!",actor:"🚀",goal:"🏆",world:"space"}
 ];
 
 const syllables=[
@@ -428,15 +487,10 @@ const words=[
 
 let day=Number(localStorage.getItem("jakov_game_day")||0);
 let done=JSON.parse(localStorage.getItem("jakov_game_done")||"[]");
-let task=0;
-let progress=0;
-let seconds=300;
-let ticker=null;
-let recognition=null;
-let listening=false;
-let current=null;
-let taskCompleted=false;
-let speechToken=0;
+let task=0,progress=0,seconds=300,ticker=null;
+let recognition=null,listening=false,current=null;
+let taskCompleted=false,speechToken=0;
+let ending=false;
 
 function say(text){
 if(!("speechSynthesis" in window))return;
@@ -476,18 +530,14 @@ $("home").classList.remove("hidden");
 $("game").classList.add("hidden");
 $("finish").classList.add("hidden");
 $("homeEmoji").textContent=days[day].emoji;
-$("homeTitle").textContent=
-"Dan "+(day+1)+": "+days[day].title;
+$("homeTitle").textContent="Dan "+(day+1)+": "+days[day].title;
 $("homeDesc").textContent=days[day].desc;
-$("homeStars").textContent=
-done.includes(day)?"⭐⭐⭐":"☆☆☆";
+$("homeStars").textContent=done.includes(day)?"⭐⭐⭐":"☆☆☆";
 drawDays();
 }
 
 function startGame(){
-task=0;
-progress=0;
-seconds=300;
+task=0;progress=0;seconds=300;ending=false;
 $("timer").textContent="05:00";
 $("home").classList.add("hidden");
 $("finish").classList.add("hidden");
@@ -514,30 +564,16 @@ return"word";
 function getTask(){
 const type=taskType();
 if(type==="listen"||type==="word"){
-return{
-type,
-...words[(task+day*3)%words.length]
-};
+return{type,...words[(task+day*3)%words.length]};
 }
 if(type==="syllable"){
-return{
-type,
-word:syllables[(task+day*2)%syllables.length]
-};
+return{type,word:syllables[(task+day*2)%syllables.length]};
 }
 const sequences=[
-"DA DA DA",
-"DE DE DE",
-"TA DA",
-"TE DE",
-"DI DI DI",
-"LA LA LA",
-"RA RA RA"
+"DA DA DA","DE DE DE","TA DA",
+"TE DE","DI DI DI","LA LA LA","RA RA RA"
 ];
-return{
-type,
-word:sequences[(task+day)%sequences.length]
-};
+return{type,word:sequences[(task+day)%sequences.length]};
 }
 
 function showTask(){
@@ -546,8 +582,7 @@ current=getTask();
 $("feedback").textContent="";
 $("options").innerHTML="";
 $("bar").style.width=(progress/8*100)+"%";
-$("mission").textContent=
-"Dan "+(day+1)+" • Izazov "+(task+1)+"/8";
+$("mission").textContent="Dan "+(day+1)+" • "+(task+1)+"/8";
 
 const d=days[day];
 $("world").className="world "+d.world;
@@ -561,25 +596,21 @@ $("micBtn").classList.remove("hidden");
 
 if(current.type==="listen"){
 $("prompt").textContent="Čuješ li L ili R?";
-$("help").textContent=
-"Poslušaj riječ i dodirni odgovarajuće slovo.";
+$("help").textContent="Poslušaj riječ i odaberi slovo.";
 $("micBtn").classList.add("hidden");
 makeLetterOptions();
 }
 if(current.type==="syllable"){
 $("prompt").textContent=current.word;
-$("help").textContent=
-"Poslušaj slog, izgovori ga i pomakni junaka!";
+$("help").textContent="Poslušaj i ponovi slog.";
 }
 if(current.type==="sequence"){
 $("prompt").textContent=current.word;
-$("help").textContent=
-"Ponovi niz slogova kao pravi govorni majstor!";
+$("help").textContent="Ponovi niz slogova.";
 }
 if(current.type==="word"){
 $("prompt").textContent=current.word;
-$("help").textContent=
-"Poslušaj riječ i pokušaj je izgovoriti.";
+$("help").textContent="Poslušaj i izgovori riječ.";
 }
 }
 
@@ -595,8 +626,7 @@ b.classList.add("correct");
 completeTask();
 }else{
 b.classList.add("wrong");
-$("feedback").textContent=
-"Poslušaj još jednom, Jakove!";
+$("feedback").textContent="Poslušaj još jednom, Jakove!";
 say("Poslušaj još jednom, Jakove!");
 }
 };
@@ -605,19 +635,17 @@ $("options").appendChild(b);
 }
 
 function listen(){
-if(!current)return;
-say(current.word.toLowerCase());
+if(current)say(current.word.toLowerCase());
 }
 
 function updateActor(){
 const pct=Math.min(progress/8,1);
 $("actor").style.left=(7+pct*65)+"%";
-$("stepText").textContent=
-"Prijeđeno "+progress+" od 8 koraka";
+$("stepText").textContent="Prijeđeno "+progress+" od 8 koraka";
 }
 
 function completeTask(){
-if(taskCompleted)return;
+if(taskCompleted||ending)return;
 taskCompleted=true;
 progress=Math.min(progress+1,8);
 updateActor();
@@ -627,7 +655,8 @@ void $("actor").offsetWidth;
 $("actor").classList.add("celebrate");
 randomPraise();
 if(progress>=8){
-setTimeout(endGame,1800);
+ending=true;
+setTimeout(endGame,1700);
 }
 }
 
@@ -636,6 +665,7 @@ completeTask();
 }
 
 function stopRecognition(){
+speechToken++;
 if(recognition){
 try{recognition.abort()}catch(e){}
 recognition=null;
@@ -646,15 +676,12 @@ $("micBtn").disabled=false;
 
 function recordSpeech(){
 if(listening||taskCompleted)return;
-const SR=window.SpeechRecognition||
-window.webkitSpeechRecognition;
-
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(!SR){
 $("feedback").textContent=
-"Prepoznavanje govora nije dostupno. Roditelj može potvrditi pokušaj.";
+"Prepoznavanje nije dostupno. Roditelj može potvrditi pokušaj.";
 return;
 }
-
 speechSynthesis.cancel();
 stopRecognition();
 const token=++speechToken;
@@ -663,38 +690,31 @@ recognition=rec;
 rec.lang="hr-HR";
 rec.interimResults=false;
 rec.maxAlternatives=1;
-rec.continuous=false;
 listening=true;
 $("micBtn").disabled=true;
 $("feedback").textContent="🎤 Jakove, slušam te!";
-
 rec.onresult=e=>{
 if(token!==speechToken)return;
 const heard=e.results[0][0].transcript;
-$("feedback").textContent=
-"Čuo sam: "+heard;
+$("feedback").textContent="Čuo sam: "+heard;
 completeTask();
 };
-
 rec.onerror=e=>{
 if(token!==speechToken)return;
 $("feedback").textContent=
 "Nisam dobro čuo. Pokušaj ponovno ili pozovi roditelja.";
 };
-
 rec.onend=()=>{
 if(token!==speechToken)return;
 listening=false;
 $("micBtn").disabled=false;
 recognition=null;
 };
-
 try{rec.start()}
 catch(e){
 listening=false;
 $("micBtn").disabled=false;
-$("feedback").textContent=
-"Mikrofon se nije mogao pokrenuti.";
+$("feedback").textContent="Mikrofon se nije mogao pokrenuti.";
 }
 }
 
@@ -702,8 +722,7 @@ function nextTask(){
 stopRecognition();
 if(progress>=8){endGame();return}
 if(!taskCompleted){
-$("feedback").textContent=
-"Prvo pokušaj riješiti izazov, Jakove!";
+$("feedback").textContent="Prvo pokušaj riješiti izazov, Jakove!";
 return;
 }
 task++;
