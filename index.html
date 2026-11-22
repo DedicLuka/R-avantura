@@ -4,747 +4,653 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101d43">
-<title>Jakovljeva R-avantura</title>
+<meta name="theme-color" content="#14234b">
+<title>Jakovljeva R-avantura 4.0</title>
 <style>
 *{box-sizing:border-box}
-:root{
- --gold:#ffda63;
- --cyan:#60e4f5;
- --pink:#ff88b8;
- --green:#5ce6a4;
-}
-html,body{
- margin:0;
- width:100%;
- height:100%;
- overflow:hidden;
- overscroll-behavior:none;
-}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
 body{
- background:linear-gradient(160deg,#101d43,#47318a);
- color:white;
  font-family:system-ui,-apple-system,sans-serif;
-}
-button{
- font-family:inherit;
- cursor:pointer;
- touch-action:manipulation;
-}
-button:disabled{opacity:.55}
-.app{
- width:100%;
- max-width:560px;
- height:100dvh;
- margin:auto;
- padding:
- max(6px,env(safe-area-inset-top))
- 10px
- max(6px,env(safe-area-inset-bottom));
- display:flex;
- flex-direction:column;
- gap:6px;
- overflow:hidden;
-}
-header{
- text-align:center;
- flex-shrink:0;
-}
-h1{
- font-size:clamp(18px,4.8vw,24px);
- margin:2px 0;
-}
-.sub{
- font-size:11px;
- color:#ddd5ff;
-}
-.panel{
- background:#ffffff15;
- border:1px solid #ffffff35;
- border-radius:16px;
- padding:9px;
- min-height:0;
-}
-.days{
- display:grid;
- grid-template-columns:repeat(7,1fr);
- gap:4px;
-}
-.day{
- background:#ffffff20;
- border:1px solid #ffffff40;
  color:white;
- border-radius:9px;
- min-height:30px;
- font-size:12px;
- font-weight:800;
+ background:linear-gradient(150deg,#14234b,#49318a);
 }
-.day.active{
- background:var(--gold);
- color:#202044;
-}
-.day.done{border:2px solid var(--green)}
-#home,#finish{
- flex:1;
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- gap:12px;
-}
-.hero{
- text-align:center;
- font-size:clamp(55px,12vh,90px);
-}
-h2{
- text-align:center;
- font-size:22px;
- margin:5px;
-}
-.help{
- text-align:center;
- color:#e8e2ff;
- line-height:1.25;
- font-size:clamp(12px,2.8vw,14px);
- margin:3px 0;
-}
-.primary{
- width:100%;
- min-height:48px;
- background:var(--gold);
- border:0;
- border-radius:13px;
- color:#292044;
- font-size:17px;
- font-weight:900;
-}
-#game{
- flex:1;
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.5}
+.app{
+ height:100dvh;
+ max-width:560px;
+ margin:auto;
+ padding:max(5px,env(safe-area-inset-top)) 10px
+ max(5px,env(safe-area-inset-bottom));
  display:flex;
  flex-direction:column;
  gap:5px;
  overflow:hidden;
 }
-.top{
+header{text-align:center;flex-shrink:0}
+h1{font-size:clamp(17px,4.7vw,24px);margin:2px}
+.sub{font-size:11px;color:#ddd6ff}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex-shrink:0}
+.day{
+ border:1px solid #ffffff50;
+ border-radius:10px;
+ background:#ffffff20;
+ color:white;
+ min-height:32px;
+ font-weight:800;
+}
+.day.active{background:#ffdc67;color:#252044}
+.day.done{border:2px solid #58e6a1}
+.panel{
+ background:#ffffff15;
+ border:1px solid #ffffff30;
+ border-radius:17px;
+ padding:9px;
+}
+#home,#finish{
+ flex:1;
  display:flex;
- justify-content:space-between;
+ flex-direction:column;
+ justify-content:center;
  align-items:center;
- flex-shrink:0;
- font-size:12px;
+ gap:12px;
 }
-.timer{
- font-size:18px;
- font-weight:900;
+#game{
+ flex:1;
+ min-height:0;
+ display:flex;
+ flex-direction:column;
+ gap:5px;
 }
-.progress{
- height:7px;
- background:#ffffff30;
- border-radius:20px;
- overflow:hidden;
- flex-shrink:0;
-}
-.bar{
- height:100%;
- width:0;
- background:var(--gold);
- transition:.4s;
-}
+.hidden{display:none!important}
+.top{display:flex;justify-content:space-between;font-size:13px;font-weight:800}
+.timer{font-size:19px}
+.progress{height:7px;background:#ffffff35;border-radius:10px;overflow:hidden}
+.bar{height:100%;width:0;background:#ffdc67;transition:.4s}
 .world{
  position:relative;
  flex:1;
- min-height:75px;
- max-height:240px;
+ min-height:70px;
+ max-height:225px;
+ border-radius:15px;
  overflow:hidden;
- border-radius:14px;
- background:linear-gradient(#3471bf,#83c5ed);
+ background:linear-gradient(#72c6eb,#5589c6);
 }
-.world.space{
- background:radial-gradient(circle at 70% 20%,#4544a0,#09152e);
-}
-.world.ocean{
- background:linear-gradient(#45b9d6,#075184);
-}
-.world.roadworld{
- background:linear-gradient(#78c5eb 0 60%,#47764d 60%);
-}
-.world.forest{
- background:linear-gradient(#79c9ee,#60aa77);
-}
-.world:before{
- content:"✦ ✧ ✦";
- position:absolute;
- top:8px;
- right:15px;
- font-size:18px;
- opacity:.6;
-}
+.world.space{background:radial-gradient(circle at 70% 25%,#5144a6,#09142d)}
+.world.ocean{background:linear-gradient(#49bed8,#08477d)}
+.world.forest{background:linear-gradient(#8bd1ee 0 60%,#478f59 60%)}
+.world.road{background:linear-gradient(#80c5e5 0 55%,#4b8b5b 55%)}
 .path{
- position:absolute;
- left:8%;
- right:8%;
- bottom:29%;
- height:6px;
- background:#ffffff80;
- border-radius:20px;
+ position:absolute;left:8%;right:8%;bottom:29%;
+ height:6px;background:#ffffff99;border-radius:10px;
 }
 .actor{
- position:absolute;
- left:7%;
- bottom:34%;
- font-size:clamp(35px,8vh,65px);
+ position:absolute;left:7%;bottom:35%;
+ font-size:clamp(38px,8vh,65px);
  transition:left .65s ease;
- z-index:2;
 }
 .goal{
- position:absolute;
- right:4%;
- bottom:34%;
- font-size:clamp(32px,7vh,55px);
+ position:absolute;right:4%;bottom:35%;
+ font-size:clamp(34px,7vh,56px);
 }
-.worldLabel{
- position:absolute;
- top:7px;
- left:9px;
- font-size:11px;
- font-weight:800;
- background:#0004;
- border-radius:9px;
- padding:5px 8px;
+.worldName{
+ position:absolute;top:7px;left:8px;
+ background:#0005;border-radius:9px;
+ padding:5px 9px;font-size:11px;font-weight:800;
 }
-.stepText{
- position:absolute;
- bottom:5px;
- left:0;
- width:100%;
+.distance{
+ position:absolute;bottom:5px;width:100%;
+ text-align:center;font-size:12px;font-weight:800;
+}
+.exercise{
  text-align:center;
- font-size:11px;
- font-weight:800;
-}
-.prompt{
- font-size:clamp(17px,4.5vw,23px);
- text-align:center;
- font-weight:900;
- margin:2px 0;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ gap:3px;
  flex-shrink:0;
 }
-.listen{
- width:100%;
- min-height:49px;
- background:var(--cyan);
- color:#073c53;
- border:0;
- border-radius:13px;
- font-size:19px;
+.exerciseIcon{font-size:clamp(25px,5vh,42px)}
+.exerciseTitle{
+ font-size:clamp(18px,4.5vw,24px);
  font-weight:900;
+}
+.exerciseHelp{
+ font-size:clamp(12px,3vw,14px);
+ color:#e9e3ff;
+ line-height:1.3;
+}
+.count{
+ text-align:center;
+ font-size:17px;
+ font-weight:900;
+ color:#ffdc67;
+}
+.listen{
+ width:100%;min-height:45px;
+ border:0;border-radius:13px;
+ background:#60e4f5;color:#083a50;
+ font-size:18px;font-weight:900;
  flex-shrink:0;
 }
 .mic{
- width:100%;
- min-height:51px;
- background:var(--pink);
- color:#4b1640;
- border:0;
- border-radius:13px;
- font-size:19px;
- font-weight:900;
+ width:100%;min-height:47px;
+ border:0;border-radius:13px;
+ background:#ff8cbe;color:#4b1740;
+ font-size:18px;font-weight:900;
  flex-shrink:0;
 }
-.small{
- display:block;
- font-size:10px;
- font-weight:500;
+.letters{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:9px;flex-shrink:0;
 }
-.options{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
- flex-shrink:0;
+.letters:empty{display:none}
+.letter{
+ min-height:62px;border:2px solid #ffffff55;
+ border-radius:14px;background:#ffffff20;
+ color:white;font-size:42px;font-weight:900;
 }
-.options:empty{display:none}
-.option{
- min-height:62px;
- border-radius:13px;
- background:#ffffff20;
- border:2px solid #ffffff50;
- color:white;
- font-size:42px;
- font-weight:900;
-}
-.option.correct{background:#20865c}
-.option.wrong{background:#963c62}
+.letter.correct{background:#25845b}
+.letter.wrong{background:#9a3d65}
 .feedback{
- text-align:center;
- min-height:22px;
- font-size:clamp(12px,3vw,15px);
- font-weight:800;
- flex-shrink:0;
+ min-height:19px;text-align:center;
+ font-size:13px;font-weight:800;
 }
-.parent{
- display:flex;
- gap:6px;
- align-items:center;
- flex-shrink:0;
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
+.actions button{
+ min-height:42px;border:1px solid #ffffff45;
+ border-radius:12px;background:#ffffff24;
+ color:white;font-size:13px;font-weight:800;
 }
-.parentTitle{
- font-size:10px;
- color:#d8d0ff;
- width:72px;
-}
-.parent button{
- flex:1;
- background:#ffffff25;
- border:1px solid #ffffff50;
- color:white;
- padding:8px 5px;
- border-radius:10px;
- font-size:12px;
- font-weight:800;
-}
+.actions .confirm{background:#37b88a;color:#082d25;border:0}
 .next{
- width:100%;
- min-height:42px;
- background:#ffffff25;
- border:1px solid #ffffff50;
- color:white;
- border-radius:12px;
- font-size:15px;
- font-weight:800;
+ width:100%;min-height:40px;
+ background:#ffdc67;color:#242044;
+ border:0;border-radius:12px;
+ font-size:16px;font-weight:900;
  flex-shrink:0;
 }
-.stars{
- text-align:center;
- font-size:30px;
+.bigEmoji{font-size:75px;text-align:center}
+h2{text-align:center;font-size:22px;margin:3px}
+.desc{text-align:center;color:#e8e1ff;font-size:15px}
+.start{
+ width:100%;min-height:57px;
+ background:#ffdc67;border:0;border-radius:14px;
+ font-size:19px;font-weight:900;color:#242044;
 }
-.hidden{display:none!important}
-.footer{
- text-align:center;
- font-size:9px;
- color:#c8c0e8;
- flex-shrink:0;
+.footer{text-align:center;font-size:9px;color:#cfc5ee;flex-shrink:0}
+@keyframes bounce{
+ 50%{transform:translateY(-13px) scale(1.1)}
 }
-@keyframes celebrate{
- 0%,100%{transform:scale(1)}
- 50%{transform:scale(1.2) rotate(-7deg)}
-}
-.celebrate{animation:celebrate .5s}
-
-/* Mali iPhone zasloni */
-@media(max-height:750px){
- .app{gap:4px}
+.bounce{animation:bounce .5s}
+@media(max-height:730px){
+ .app{gap:3px}
  .panel{padding:6px}
- .day{min-height:26px}
- .world{min-height:60px}
- .listen{min-height:43px}
- .mic{min-height:44px}
- .option{min-height:52px;font-size:35px}
- .next{min-height:37px}
- .help{font-size:11px}
- .parent button{padding:6px 4px}
+ .day{min-height:27px}
+ .world{min-height:50px}
+ .exerciseIcon{font-size:25px}
+ .exerciseTitle{font-size:18px}
+ .exerciseHelp{font-size:11px}
+ .listen,.mic{min-height:38px;font-size:15px}
+ .letter{min-height:44px;font-size:30px}
+ .actions button{min-height:35px}
+ .next{min-height:34px}
+ .feedback{min-height:15px;font-size:11px}
 }
-/* Vrlo niski zasloni ili landscape */
-@media(max-height:560px){
- header .sub,.footer,#help{display:none}
- h1{font-size:17px}
- .world{min-height:45px}
- .actor{font-size:34px}
- .goal{font-size:30px}
- .listen,.mic{min-height:35px;font-size:15px}
- .small{display:none}
- .option{min-height:36px;font-size:26px}
- .next{min-height:32px}
- .parent button{padding:4px}
- .feedback{min-height:16px}
+@media(max-height:540px){
+ .sub,.footer,.exerciseIcon{display:none}
+ .world{min-height:35px}
+ .actor{font-size:30px}
+ .goal{font-size:28px}
+ .exerciseHelp{font-size:10px}
+ .listen,.mic{min-height:30px}
+ .actions button{min-height:29px}
+ .next{min-height:29px}
 }
 </style>
 </head>
 <body>
-
 <div class="app">
 
 <header>
 <h1>🚀 Jakovljeva R-avantura</h1>
-<div class="sub">Govori • Igraj • Osvoji cilj!</div>
+<div class="sub">Pokreni jezik • Izgovori • Stigni do cilja!</div>
 </header>
 
-<div class="panel">
 <div id="days" class="days"></div>
-</div>
 
 <section id="home" class="panel">
-<div id="homeEmoji" class="hero">🚀</div>
+<div id="homeIcon" class="bigEmoji"></div>
 <h2 id="homeTitle"></h2>
-<p id="homeDesc" class="help"></p>
-<div id="homeStars" class="stars"></div>
-<button class="primary" onclick="startGame()">
-▶ ZAPOČNI MISIJU
-</button>
+<p id="homeDesc" class="desc"></p>
+<button class="start" onclick="startGame()">▶ KRENI!</button>
 </section>
 
 <section id="game" class="panel hidden">
 <div class="top">
-<strong id="mission"></strong>
-<div class="timer" id="timer">05:00</div>
+<span id="mission"></span>
+<span id="timer" class="timer">05:00</span>
 </div>
 
-<div class="progress">
-<div id="bar" class="bar"></div>
-</div>
+<div class="progress"><div id="bar" class="bar"></div></div>
 
 <div id="world" class="world">
-<div id="worldLabel" class="worldLabel"></div>
+<div id="worldName" class="worldName"></div>
 <div class="path"></div>
-<div id="actor" class="actor">🚀</div>
-<div id="goal" class="goal">🌕</div>
-<div id="stepText" class="stepText"></div>
+<div id="actor" class="actor"></div>
+<div id="goal" class="goal"></div>
+<div id="distance" class="distance"></div>
 </div>
 
-<div id="prompt" class="prompt"></div>
-<p id="help" class="help"></p>
+<div class="exercise">
+<div id="exerciseIcon" class="exerciseIcon"></div>
+<div id="exerciseTitle" class="exerciseTitle"></div>
+<div id="exerciseHelp" class="exerciseHelp"></div>
+</div>
+
+<div id="count" class="count"></div>
 
 <button id="listenBtn" class="listen" onclick="listen()">
-🔊 SLUŠAJ
-<span class="small">Čuj riječ ili slog</span>
+🔊 SLUŠAJ UPUTU
 </button>
 
-<div id="options" class="options"></div>
+<div id="letters" class="letters"></div>
 
 <button id="micBtn" class="mic" onclick="recordSpeech()">
-🎤 IZGOVORI
-<span class="small">Jakove, sada si ti na redu!</span>
+🎤 IZGOVORI SLOG
 </button>
 
 <div id="feedback" class="feedback"></div>
 
-<div class="parent">
-<div class="parentTitle">RODITELJ</div>
-<button onclick="parentConfirm()">
-👏 Potvrdi pokušaj
+<div class="actions">
+<button id="repeatBtn" onclick="repeatDone()">
+👅 Izvedeno 1×
+</button>
+<button id="confirmBtn" class="confirm" onclick="parentConfirm()">
+👏 POTVRDI
 </button>
 </div>
 
-<button class="next" onclick="nextTask()">
-SLJEDEĆI IZAZOV ➜
+<button id="nextBtn" class="next" onclick="nextTask()">
+SLJEDEĆA VJEŽBA ➜
 </button>
 </section>
 
 <section id="finish" class="panel hidden">
-<div class="hero">🏆</div>
-<h2>Misija završena!</h2>
-<p class="help">Jakove, stigao si do cilja!</p>
-<div class="stars">⭐⭐⭐</div>
-<button class="primary" onclick="finishHome()">
-NASTAVI AVANTURU
-</button>
+<div class="bigEmoji">🏆</div>
+<h2>Bravo, Jakove!</h2>
+<p id="finishText" class="desc"></p>
+<div style="font-size:35px">⭐⭐⭐</div>
+<button class="start" onclick="finishHome()">NASTAVI</button>
 </section>
 
 <div class="footer">
-Vježbe uz roditelja • Mikrofon ne ocjenjuje pravilnost R
+Vježbe uz roditelja • Bez boli i forsiranja • Mikrofon ne ocjenjuje R
 </div>
 </div>
 
 <script>
 const $=id=>document.getElementById(id);
 
-const praise=[
-"Bravo, Jakove! Ideš prema cilju!",
-"Odlično, Jakove! Samo tako!",
-"Svaka čast, Jakove! Pravi si junak!",
-"Fenomenalno, Jakove! Još malo!",
-"Super pokušaj, Jakove!",
-"Jakove, osvojio si novu zvjezdicu!",
-"Bravo, Jakove! Uspio si!"
+const missions=[
+ {name:"Svemirska misija",actor:"🚀",goal:"🌕",world:"space"},
+ {name:"Automobilska utrka",actor:"🏎️",goal:"🏁",world:"road"},
+ {name:"Veseli vlak",actor:"🚂",goal:"🏰",world:"forest"},
+ {name:"Potraga za blagom",actor:"🤿",goal:"💎",world:"ocean"},
+ {name:"Šumska pustolovina",actor:"🦊",goal:"🏡",world:"forest"},
+ {name:"Velika utrka",actor:"🏎️",goal:"🏆",world:"road"},
+ {name:"Završna misija",actor:"🚀",goal:"🏆",world:"space"}
 ];
 
-const days=[
-{title:"Svemirska misija",emoji:"🚀",desc:"Izgovaraj slogove i poleti do Mjeseca!",actor:"🚀",goal:"🌕",world:"space"},
-{title:"Utrka automobila",emoji:"🏎️",desc:"Svaki slog pomiče automobil prema cilju.",actor:"🏎️",goal:"🏁",world:"roadworld"},
-{title:"Putovanje vlakom",emoji:"🚂",desc:"Pokreni vlak govornim zadacima.",actor:"🚂",goal:"🏰",world:"forest"},
-{title:"Potraga za blagom",emoji:"🤿",desc:"Zaroni i pronađi skriveno blago.",actor:"🤿",goal:"💎",world:"ocean"},
-{title:"Šumska avantura",emoji:"🦊",desc:"Pronađi put kroz čarobnu šumu.",actor:"🦊",goal:"🏡",world:"forest"},
-{title:"Velika utrka",emoji:"🏎️",desc:"Pobijedi u utrci izgovaranjem slogova.",actor:"🏎️",goal:"🏆",world:"roadworld"},
-{title:"Završna misija",emoji:"🚀",desc:"Pokaži sve što si naučio!",actor:"🚀",goal:"🏆",world:"space"}
-];
-
-const syllables=[
-"DA","DE","DI","DO","DU",
-"TA","TE","TI","TO","TU",
-"LA","LE","LI","LO","LU",
-"RA","RE","RI","RO","RU"
+const exercises=[
+ {
+ type:"movement",icon:"👅",
+ title:"Jezik prema gore",
+ help:"Podigni vrh jezika iza gornjih zuba.",
+ instruction:"Jakove, podigni vrh jezika iza gornjih zuba. Polako, pet puta.",
+ reps:5
+ },
+ {
+ type:"movement",icon:"🐴",
+ title:"Konjić",
+ help:"Cokći jezikom kao konjić.",
+ instruction:"Jakove, napravi pet zvukova konjića jezikom.",
+ reps:5
+ },
+ {
+ type:"speech",icon:"🥁",
+ title:"Bubanj",
+ help:"Izgovori DA – DA – DA.",
+ instruction:"Jakove, ponovi: da, da, da.",
+ word:"DA DA DA",reps:3
+ },
+ {
+ type:"movement",icon:"↔️",
+ title:"Jezik lijevo-desno",
+ help:"Dotakni jezikom lijevi pa desni kut usana.",
+ instruction:"Jakove, pomakni jezik lijevo pa desno. Ponovi tri puta.",
+ reps:3
+ },
+ {
+ type:"speech",icon:"🚂",
+ title:"Pokreni vlak",
+ help:"Izgovori TA – DA – TA – DA.",
+ instruction:"Jakove, ponovi: ta, da, ta, da.",
+ word:"TA DA TA DA",reps:2
+ },
+ {
+ type:"movement",icon:"🎯",
+ title:"Pogodi točku",
+ help:"Vrhom jezika dodirni mjesto iza gornjih zuba.",
+ instruction:"Jakove, dodirni jezikom mjesto iza gornjih zuba. Pet puta.",
+ reps:5
+ },
+ {
+ type:"speech",icon:"🔊",
+ title:"Brzi bubanj",
+ help:"Ponovi DE – DE – DE, ugodnim tempom.",
+ instruction:"Jakove, ponovi: de, de, de.",
+ word:"DE DE DE",reps:3
+ },
+ {
+ type:"speech",icon:"⭐",
+ title:"Pokušaj glas R",
+ help:"Pokušaj R samo ako je ugodno. Možeš i ponoviti DA.",
+ instruction:"Jakove, pokušaj izgovoriti glas er. Ako je teško, ponovi da.",
+ word:"R",reps:2
+ },
+ {
+ type:"listen",icon:"👂",
+ title:"Čuješ li L ili R?",
+ help:"Poslušaj riječ i odaberi početno slovo.",
+ instruction:"Poslušaj riječ.",
+ reps:1
+ },
+ {
+ type:"speech",icon:"🎵",
+ title:"Slogovi",
+ help:"Izgovori TA – DA – DE.",
+ instruction:"Jakove, ponovi: ta, da, de.",
+ word:"TA DA DE",reps:2
+ }
 ];
 
 const words=[
-{word:"LAV",sound:"L"},
-{word:"RIBA",sound:"R"},
-{word:"LIMUN",sound:"L"},
-{word:"RAK",sound:"R"},
-{word:"LOPTA",sound:"L"},
-{word:"ROBOT",sound:"R"},
-{word:"LIST",sound:"L"},
-{word:"RUKA",sound:"R"},
-{word:"LUK",sound:"L"},
-{word:"RUŽA",sound:"R"}
+ {word:"RIBA",sound:"R"},
+ {word:"LAV",sound:"L"},
+ {word:"RAK",sound:"R"},
+ {word:"LIMUN",sound:"L"},
+ {word:"ROBOT",sound:"R"},
+ {word:"LOPTA",sound:"L"},
+ {word:"RUKA",sound:"R"},
+ {word:"LIST",sound:"L"}
 ];
 
-let day=Number(localStorage.getItem("jakov_game_day")||0);
-let done=JSON.parse(localStorage.getItem("jakov_game_done")||"[]");
-let task=0,progress=0,seconds=300,ticker=null;
-let recognition=null,listening=false,current=null;
-let taskCompleted=false,speechToken=0;
-let ending=false;
+const praise=[
+"Bravo, Jakove! Napreduješ!",
+"Odlično, Jakove! Još malo do cilja!",
+"Svaka čast, Jakove!",
+"Super pokušaj, Jakove!",
+"Jakove, tvoj junak ide dalje!",
+"Bravo, Jakove! Pravi si istraživač!"
+];
 
-function say(text){
-if(!("speechSynthesis" in window))return;
-speechSynthesis.cancel();
-const u=new SpeechSynthesisUtterance(text);
-u.lang="hr-HR";
-u.rate=.82;
-speechSynthesis.speak(u);
-}
+let day=Number(localStorage.getItem("jakov_r4_day")||0);
+let done=JSON.parse(localStorage.getItem("jakov_r4_done")||"[]");
+let task=0,progress=0,repeats=0;
+let seconds=300,ticker=null;
+let current=null,completed=false,ending=false;
+let recognition=null,token=0;
 
-function randomPraise(){
-const p=praise[Math.floor(Math.random()*praise.length)];
-$("feedback").textContent=p;
-say(p);
+function say(t){
+ if(!("speechSynthesis" in window))return;
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(t);
+ u.lang="hr-HR";
+ u.rate=.82;
+ speechSynthesis.speak(u);
 }
 
 function drawDays(){
-$("days").innerHTML="";
-days.forEach((d,i)=>{
-const b=document.createElement("button");
-b.className="day"+(day===i?" active":"")+
-(done.includes(i)?" done":"");
-b.textContent=(done.includes(i)?"⭐":"")+(i+1);
-b.onclick=()=>{
-day=i;
-localStorage.setItem("jakov_game_day",day);
-home();
-};
-$("days").appendChild(b);
-});
+ $("days").innerHTML="";
+ missions.forEach((m,i)=>{
+  const b=document.createElement("button");
+  b.className="day"+(i===day?" active":"")+
+   (done.includes(i)?" done":"");
+  b.textContent=(done.includes(i)?"⭐":"")+(i+1);
+  b.onclick=()=>{
+   day=i;
+   localStorage.setItem("jakov_r4_day",day);
+   home();
+  };
+  $("days").appendChild(b);
+ });
 }
 
 function home(){
-clearInterval(ticker);
-stopRecognition();
-$("home").classList.remove("hidden");
-$("game").classList.add("hidden");
-$("finish").classList.add("hidden");
-$("homeEmoji").textContent=days[day].emoji;
-$("homeTitle").textContent="Dan "+(day+1)+": "+days[day].title;
-$("homeDesc").textContent=days[day].desc;
-$("homeStars").textContent=done.includes(day)?"⭐⭐⭐":"☆☆☆";
-drawDays();
+ clearInterval(ticker);
+ stopRecognition();
+ $("home").classList.remove("hidden");
+ $("game").classList.add("hidden");
+ $("finish").classList.add("hidden");
+ $("homeIcon").textContent=missions[day].actor;
+ $("homeTitle").textContent="Dan "+(day+1)+": "+missions[day].name;
+ $("homeDesc").textContent="Izvedi vježbe i stigni do cilja!";
+ drawDays();
 }
 
 function startGame(){
-task=0;progress=0;seconds=300;ending=false;
-$("timer").textContent="05:00";
-$("home").classList.add("hidden");
-$("finish").classList.add("hidden");
-$("game").classList.remove("hidden");
-clearInterval(ticker);
-ticker=setInterval(()=>{
-seconds--;
-$("timer").textContent=
-String(Math.floor(Math.max(seconds,0)/60)).padStart(2,"0")+
-":"+
-String(Math.max(seconds,0)%60).padStart(2,"0");
-if(seconds<=0)endGame();
-},1000);
-showTask();
+ task=0;progress=0;repeats=0;seconds=300;ending=false;
+ $("timer").textContent="05:00";
+ $("home").classList.add("hidden");
+ $("finish").classList.add("hidden");
+ $("game").classList.remove("hidden");
+ const m=missions[day];
+ $("world").className="world "+m.world;
+ $("worldName").textContent=m.name;
+ $("actor").textContent=m.actor;
+ $("goal").textContent=m.goal;
+ clearInterval(ticker);
+ ticker=setInterval(()=>{
+  seconds--;
+  $("timer").textContent=
+   String(Math.floor(Math.max(0,seconds)/60)).padStart(2,"0")+
+   ":"+String(Math.max(0,seconds)%60).padStart(2,"0");
+  if(seconds<=0)endGame();
+ },1000);
+ showTask();
 }
 
-function taskType(){
-if(task%4===0)return"listen";
-if(task%4===1)return"syllable";
-if(task%4===2)return"sequence";
-return"word";
-}
-
-function getTask(){
-const type=taskType();
-if(type==="listen"||type==="word"){
-return{type,...words[(task+day*3)%words.length]};
-}
-if(type==="syllable"){
-return{type,word:syllables[(task+day*2)%syllables.length]};
-}
-const sequences=[
-"DA DA DA","DE DE DE","TA DA",
-"TE DE","DI DI DI","LA LA LA","RA RA RA"
-];
-return{type,word:sequences[(task+day)%sequences.length]};
+function exerciseForTask(){
+ const order=[
+  [0,2,1,4,5,6,3,7],
+  [1,4,0,6,3,2,5,8],
+  [5,2,1,9,0,4,3,7],
+  [3,6,5,2,1,4,0,8],
+  [0,9,3,4,5,2,1,7],
+  [1,6,0,4,3,9,5,8],
+  [5,2,3,4,0,6,1,7]
+ ];
+ return {...exercises[order[day][task]]};
 }
 
 function showTask(){
-taskCompleted=false;
-current=getTask();
-$("feedback").textContent="";
-$("options").innerHTML="";
-$("bar").style.width=(progress/8*100)+"%";
-$("mission").textContent="Dan "+(day+1)+" • "+(task+1)+"/8";
+ completed=false;
+ repeats=0;
+ current=exerciseForTask();
+ $("mission").textContent="Dan "+(day+1)+" • "+(task+1)+"/8";
+ $("exerciseIcon").textContent=current.icon;
+ $("exerciseTitle").textContent=current.title;
+ $("exerciseHelp").textContent=current.help;
+ $("feedback").textContent="";
+ $("letters").innerHTML="";
+ $("micBtn").classList.toggle("hidden",current.type!=="speech");
+ $("repeatBtn").classList.toggle("hidden",current.type==="listen");
+ $("confirmBtn").classList.toggle("hidden",current.type==="listen");
+ $("listenBtn").textContent="🔊 SLUŠAJ UPUTU";
+ $("nextBtn").disabled=true;
 
-const d=days[day];
-$("world").className="world "+d.world;
-$("worldLabel").textContent=d.title;
-$("actor").textContent=d.actor;
-$("goal").textContent=d.goal;
-updateActor();
-
-$("listenBtn").classList.remove("hidden");
-$("micBtn").classList.remove("hidden");
-
-if(current.type==="listen"){
-$("prompt").textContent="Čuješ li L ili R?";
-$("help").textContent="Poslušaj riječ i odaberi slovo.";
-$("micBtn").classList.add("hidden");
-makeLetterOptions();
-}
-if(current.type==="syllable"){
-$("prompt").textContent=current.word;
-$("help").textContent="Poslušaj i ponovi slog.";
-}
-if(current.type==="sequence"){
-$("prompt").textContent=current.word;
-$("help").textContent="Ponovi niz slogova.";
-}
-if(current.type==="word"){
-$("prompt").textContent=current.word;
-$("help").textContent="Poslušaj i izgovori riječ.";
-}
+ if(current.type==="listen"){
+  const w=words[(task+day*2)%words.length];
+  current.word=w.word;
+  current.sound=w.sound;
+  $("listenBtn").textContent="🔊 SLUŠAJ RIJEČ";
+  ["L","R"].forEach(letter=>{
+   const b=document.createElement("button");
+   b.className="letter";
+   b.textContent=letter;
+   b.onclick=()=>{
+    if(completed)return;
+    if(letter===current.sound){
+     b.classList.add("correct");
+     completeTask();
+    }else{
+     b.classList.add("wrong");
+     $("feedback").textContent="Pokušaj još jednom, Jakove!";
+     say("Pokušaj još jednom, Jakove!");
+    }
+   };
+   $("letters").appendChild(b);
+  });
+ }
+ updateCount();
+ updateWorld();
 }
 
-function makeLetterOptions(){
-["L","R"].forEach(letter=>{
-const b=document.createElement("button");
-b.className="option";
-b.textContent=letter;
-b.onclick=()=>{
-if(taskCompleted)return;
-if(letter===current.sound){
-b.classList.add("correct");
-completeTask();
-}else{
-b.classList.add("wrong");
-$("feedback").textContent="Poslušaj još jednom, Jakove!";
-say("Poslušaj još jednom, Jakove!");
-}
-};
-$("options").appendChild(b);
-});
+function updateCount(){
+ $("count").textContent=current.type==="listen"?
+ "Odaberi slovo L ili R":
+ "Ponavljanja: "+repeats+" / "+current.reps;
 }
 
 function listen(){
-if(current)say(current.word.toLowerCase());
+ if(!current)return;
+ say(current.type==="listen"?
+  current.word.toLowerCase():current.instruction);
 }
 
-function updateActor(){
-const pct=Math.min(progress/8,1);
-$("actor").style.left=(7+pct*65)+"%";
-$("stepText").textContent="Prijeđeno "+progress+" od 8 koraka";
-}
-
-function completeTask(){
-if(taskCompleted||ending)return;
-taskCompleted=true;
-progress=Math.min(progress+1,8);
-updateActor();
-$("bar").style.width=(progress/8*100)+"%";
-$("actor").classList.remove("celebrate");
-void $("actor").offsetWidth;
-$("actor").classList.add("celebrate");
-randomPraise();
-if(progress>=8){
-ending=true;
-setTimeout(endGame,1700);
-}
+function repeatDone(){
+ if(completed)return;
+ repeats=Math.min(repeats+1,current.reps);
+ updateCount();
+ if(repeats>=current.reps){
+  $("feedback").textContent=
+   "Jakove, pozovi roditelja da potvrdi!";
+ }
 }
 
 function parentConfirm(){
-completeTask();
+ if(completed)return;
+ completeTask();
+}
+
+function updateWorld(){
+ $("actor").style.left=(7+progress/8*65)+"%";
+ $("distance").textContent="Napredak: "+progress+" / 8";
+ $("bar").style.width=(progress/8*100)+"%";
+}
+
+function completeTask(){
+ if(completed||ending)return;
+ completed=true;
+ progress=Math.min(8,progress+1);
+ updateWorld();
+ $("actor").classList.remove("bounce");
+ void $("actor").offsetWidth;
+ $("actor").classList.add("bounce");
+ $("nextBtn").disabled=false;
+ const p=praise[Math.floor(Math.random()*praise.length)];
+ $("feedback").textContent=p;
+ say(p);
+ if(progress>=8){
+  ending=true;
+  setTimeout(endGame,1800);
+ }
 }
 
 function stopRecognition(){
-speechToken++;
-if(recognition){
-try{recognition.abort()}catch(e){}
-recognition=null;
-}
-listening=false;
-$("micBtn").disabled=false;
+ token++;
+ if(recognition){
+  try{recognition.abort()}catch(e){}
+  recognition=null;
+ }
+ $("micBtn").disabled=false;
 }
 
 function recordSpeech(){
-if(listening||taskCompleted)return;
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(!SR){
-$("feedback").textContent=
-"Prepoznavanje nije dostupno. Roditelj može potvrditi pokušaj.";
-return;
-}
-speechSynthesis.cancel();
-stopRecognition();
-const token=++speechToken;
-const rec=new SR();
-recognition=rec;
-rec.lang="hr-HR";
-rec.interimResults=false;
-rec.maxAlternatives=1;
-listening=true;
-$("micBtn").disabled=true;
-$("feedback").textContent="🎤 Jakove, slušam te!";
-rec.onresult=e=>{
-if(token!==speechToken)return;
-const heard=e.results[0][0].transcript;
-$("feedback").textContent="Čuo sam: "+heard;
-completeTask();
-};
-rec.onerror=e=>{
-if(token!==speechToken)return;
-$("feedback").textContent=
-"Nisam dobro čuo. Pokušaj ponovno ili pozovi roditelja.";
-};
-rec.onend=()=>{
-if(token!==speechToken)return;
-listening=false;
-$("micBtn").disabled=false;
-recognition=null;
-};
-try{rec.start()}
-catch(e){
-listening=false;
-$("micBtn").disabled=false;
-$("feedback").textContent="Mikrofon se nije mogao pokrenuti.";
-}
+ if(completed)return;
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){
+  $("feedback").textContent=
+   "Mikrofon nije podržan. Roditelj može potvrditi pokušaj.";
+  return;
+ }
+ speechSynthesis.cancel();
+ stopRecognition();
+ const myToken=++token;
+ const rec=new SR();
+ recognition=rec;
+ rec.lang="hr-HR";
+ rec.continuous=false;
+ rec.interimResults=false;
+ $("micBtn").disabled=true;
+ $("feedback").textContent="🎤 Slušam te, Jakove!";
+ rec.onresult=e=>{
+  if(myToken!==token)return;
+  const heard=e.results[0][0].transcript;
+  repeats=Math.min(repeats+1,current.reps);
+  updateCount();
+  $("feedback").textContent=
+   "Čuo sam: "+heard+". Roditelj može potvrditi.";
+ };
+ rec.onerror=()=>{
+  if(myToken!==token)return;
+  $("feedback").textContent=
+   "Nisam dobro čuo. Pokušaj opet ili pozovi roditelja.";
+ };
+ rec.onend=()=>{
+  if(myToken!==token)return;
+  recognition=null;
+  $("micBtn").disabled=false;
+ };
+ try{rec.start()}
+ catch(e){
+  recognition=null;
+  $("micBtn").disabled=false;
+  $("feedback").textContent="Mikrofon nije dostupan.";
+ }
 }
 
 function nextTask(){
-stopRecognition();
-if(progress>=8){endGame();return}
-if(!taskCompleted){
-$("feedback").textContent="Prvo pokušaj riješiti izazov, Jakove!";
-return;
-}
-task++;
-showTask();
+ if(!completed)return;
+ stopRecognition();
+ if(progress>=8){endGame();return}
+ task++;
+ showTask();
 }
 
 function endGame(){
-if($("game").classList.contains("hidden"))return;
-clearInterval(ticker);
-stopRecognition();
-if(!done.includes(day))done.push(day);
-localStorage.setItem("jakov_game_done",JSON.stringify(done));
-$("game").classList.add("hidden");
-$("finish").classList.remove("hidden");
-drawDays();
-say("Bravo, Jakove! Stigao si do cilja! Pravi si junak!");
+ if($("game").classList.contains("hidden"))return;
+ clearInterval(ticker);
+ stopRecognition();
+ $("game").classList.add("hidden");
+ $("finish").classList.remove("hidden");
+ if(progress>=8){
+  if(!done.includes(day))done.push(day);
+  $("finishText").textContent="Stigao si do cilja!";
+ }else{
+  $("finishText").textContent=
+   "Odličan trud! Danas si napravio "+progress+" koraka.";
+ }
+ localStorage.setItem("jakov_r4_done",JSON.stringify(done));
+ drawDays();
+ say("Bravo, Jakove! Završio si današnju avanturu!");
 }
 
 function finishHome(){
-if(day<6)day++;
-localStorage.setItem("jakov_game_day",day);
-home();
+ if(day<6)day++;
+ localStorage.setItem("jakov_r4_day",day);
+ home();
 }
 
 home();
